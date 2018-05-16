@@ -390,22 +390,22 @@ def EDO2(entrada):
     
     compartimento_plastico = verifica_compartimento(pino_compartimento_plastico)
     
-	if compartimento_plastico == '0':
+    if compartimento_plastico == '0':
         time.sleep(0.1)
         if compartimento_plastico == '0':
             estado = 11 #usuário escolhe se quer inserir outra garrafa
             print("Compartimento do plástico está cheio. Realizar limpeza")
 
-	else:
-		print("Limpeza total, vamo nessa!")
-		estado = 4
+    else:
+	print("Limpeza total, vamo nessa!")
+	estado = 4
         
 #verifica se o compartimento ta cheio. ########################################
 def EDO3(entrada): 
     global estado 
     print('Estado 3')
     
-	compartimento_vidro = verifica_compartimento(pino_compartimento_vidro)
+    compartimento_vidro = verifica_compartimento(pino_compartimento_vidro)
 
     
     if compartimento_vidro == '0':
@@ -414,9 +414,9 @@ def EDO3(entrada):
             estado = 11 #usuário escolhe se quer inserir outra garrafa
             print("Compartimento do Vidro está cheio. Realizar limpeza")
 		
-	else:
-		print("Limpeza total, vamo nessa!")
-		estado = 4
+    else:
+	print("Limpeza total, vamo nessa!")
+	estado = 4
         
 #abrindo a porta para inserir a garrafa #######################################
 def EDO4(entrada): 
@@ -436,10 +436,10 @@ def EDO5(entrada):
     if (peso_balanca >= 10):
         estado = 6
     
-	while (peso_balanca < 10):
-		print("Insira a Garrafa.")
-		time.sleep(1)
-		peso_balanca = balanca()
+    while (peso_balanca < 10):
+	print("Insira a Garrafa.")
+	time.sleep(1)
+	peso_balanca = balanca()
         time.sleep(1)
         estado = 5
         
@@ -450,20 +450,20 @@ def EDO6(entrada):
     print('Estado 6')
     
     usuario_compartimento = verifica_compartimento(pino_usuario_compartimento)
-	if usuario_compartimento == '0':
-		print("Retire a mão dai porra.")
+    if usuario_compartimento == '0':
+	print("Retire a mão dai porra.")
         estado = 6
 
-		while (usuario_compartimento == "0"):
-				print("RETIRA A PORRA DA MÃO DAI")
+	while (usuario_compartimento == "0"):
+	    print("RETIRA A PORRA DA MÃO DAI")
             usuario_compartimento = verifica_compartimento(pino_usuario_compartimento)
             estado = 6
         
-		else:
-			print("Usuário retirou a mão da máquino, pode seguir em frente.")
-         estado = 7
+	else:
+	    print("Usuário retirou a mão da máquino, pode seguir em frente.")
+            estado = 7
 
-	elif usuario_compartimento == '1':
+    elif usuario_compartimento == '1':
         print("BORA BORA! LIGA TUDO")
         estado = 7
 
@@ -477,11 +477,11 @@ def EDO7(entrada):
 			print("Peso do Garrafa aprovado!")
 			estado = 8
     else:
-			print("Problemas com o peso da Garrafa, por gentileza, retire a ÁGUA da garrafa.")
-			time.sleep(1)
-			print("Aguarde 3 segundos")
-			time.sleep(3)
-            estado = 12 #criar estado para o cara retirar a garrafa
+	print("Problemas com o peso da Garrafa, por gentileza, retire a ÁGUA da garrafa.")
+	time.sleep(1)
+	print("Aguarde 3 segundos")
+	time.sleep(3)
+        estado = 12 #criar estado para o cara retirar a garrafa
             
 #Verificando capacitivo #######################################################
 def EDO8(entrada): 
@@ -489,14 +489,14 @@ def EDO8(entrada):
     print('Estado 8')
     
     print("Fazendo a checkagem do sensor capacitivo.")
-		material_garrafa_sensor = verifica_material()
+	material_garrafa_sensor = verifica_material()
 
-		if material_garrafa_sensor == garrafa['material']:
-			print('Material da garrafa está OK de acordo com QRcode e S. Capacitivo.')
+	if material_garrafa_sensor == garrafa['material']:
+	    print('Material da garrafa está OK de acordo com QRcode e S. Capacitivo.')
             estado = 9
         
        else:
-			print('temos um problema com material da garrafa.')
+	    print('temos um problema com material da garrafa.')
             estado = 12 #criar estado para o cara retirar a garrafa
              
 #Empurrando garrafa pro inferno ###############################################
@@ -505,17 +505,17 @@ def EDO9(entrada):
     print('Estado 9')
     
     if garrafa['material'] == 'vidro':
-		motor(4800)
-		time.sleep(0.5)
-		motor(-4800)
+	motor(4800)
+	time.sleep(0.5)
+	motor(-4800)
+	estado = 10
+    elif garrafa['material'] == 'plastico':
+	motor(-4800)
+	time.sleep(0.5)
+	motor(4800)
         estado = 10
-	elif garrafa['material'] == 'plastico':
-		motor(-4800)
-		time.sleep(0.5)
-		motor(4800)
-        estado = 10
-	else:
-		print("ERROR")
+    else:
+	print("ERROR")
             
 #Pontuar para o usuário #######################################################
 def EDO10(entrada):
@@ -530,13 +530,13 @@ def ED11(entrada):
     print('Estado 11')
     
     print("deseja inserir mais uma garrafa?")
-	time.sleep(2)
-	motor(-4800)
+    time.sleep(2)
+    motor(-4800)
 
-	if GPIO.input(pino_botao_confirma_nova_garrafa) == True:
-		estado = 1
-		repetir_id_qr_code_string = id_qr_code_string
-	else:
+    if GPIO.input(pino_botao_confirma_nova_garrafa) == True:
+	estado = 1
+	repetir_id_qr_code_string = id_qr_code_string
+    else:
         estado = 0
         
 #Retirar a garrafa, deu ruim ##################################################
@@ -549,12 +549,12 @@ def EDO12(entrada):
     if (peso_balanca <= 10):
         estado = 12
     
-	while peso_balanca >= (garrafa['peso'] + 20) and peso_balanca <= (garrafa['peso'] - 20):
-		print("Retire a Garrafa.")
-		time.sleep(1)
-		peso_balanca = balanca()
+    while peso_balanca >= (garrafa['peso'] + 20) and peso_balanca <= (garrafa['peso'] - 20):
+	print("Retire a Garrafa.")
+	time.sleep(1)
+	peso_balanca = balanca()
         estado = 12
-		time.sleep(1)
+	time.sleep(1)
     
     else:
         estado = 8
@@ -565,20 +565,20 @@ def EDO13(entrada):
     print('Estado 13')
     
     usuario_compartimento = verifica_compartimento(pino_usuario_compartimento)
-		if usuario_compartimento == '0':
-			print("Retire a mão dai porra.")
+    if usuario_compartimento == '0':
+	print("Retire a mão dai porra.")
         estado = 13
 
-			while (usuario_compartimento == "0"):
-					print("RETIRA A PORRA DA MÃO DAI")
-                usuario_compartimento = verifica_compartimento(pino_usuario_compartimento)
-                estado = 13
+	while (usuario_compartimento == "0"):
+	    print("RETIRA A PORRA DA MÃO DAI")
+            usuario_compartimento = verifica_compartimento(pino_usuario_compartimento)
+            estado = 13
             
-			else:
-				print("Usuário retirou a mão da máquino, pode seguir em frente.")
+	else:
+	     print("Usuário retirou a mão da máquino, pode seguir em frente.")
              estado = 14
 
-		elif usuario_compartimento == '1':
+    elif usuario_compartimento == '1':
         print("Fechar compartimento")
         estado = 14
             
@@ -587,5 +587,5 @@ def EDO14(entrada):
     global estado
     print('Estado 14')
     estado = 11 #verificar se o usuário quer inserir mais garrafas
-	print("Fechando a porta.")
-	motor(-4800)
+    print("Fechando a porta.")
+    motor(-4800)
