@@ -1,64 +1,45 @@
-MODOS_OPERACAO = {NORMAL = 'normal', ATUALIZACAO = 'atualizacao'}
-
 function loop_principal(timer_principal)
 
-  gpio.trig(3, 'up', function()
-    if (modo_operacao == MODOS_OPERACAO.NORMAL) then
-      print('\nSaindo do loop principal...');
-      modo_operacao = MODOS_OPERACAO.ATUALIZACAO
-      timer_principal:stop()
-    else
-      print('\nEntrando no loop principal...');
-      modo_operacao = MODOS_OPERACAO.NORMAL
-      timer_principal:start()
-    end
-  end)
+	  while true do
+	  	if (gpio.read(2)==1) then
+	  		if (gpio.read(7)==1) then
+	  			print("fazer nada, motor ja ta ligado")
+	  		else 
+	  			print("ligar motor")
+	  			gpio.write(7, gpio.HIGH)
+	  			flag_freio = 0
+	  		end
 
-  if (modo_operacao == MODOS_OPERACAO.NORMAL) then
- 
-	  gpio.mode(2, gpio.INPUT) -- SENSOR PROXIMO AO TRITURADOR
-	  gpio.mode(3, gpio.INPUT) -- SENSOR MAIS DISTANTE DO TRITURADOR
-	  gpio.mode(1, gpio.OUTPUT) -- RELE PARA ACIONAR TRITURADOR
-		gpio.mode(4, gpio.OUTPUT) -- RELE PARA ACIONAR O FREIO
-    
-    print('Entrando no loop principal...');
-    timer_principal:register(2500, tmr.ALARM_AUTO, function()
+	  	else
+	  		if (flag_freio == 0) then
+		  		gpio.write(7, gpio.LOW)
+		  		print("desligar motor e ligar freio")
+		  		tmr.delay(500000)
+		  		gpio.write(8, gpio.HIGH)
+		  		tmr.delay(1500000)
+		  		gpio.write(8, gpio.LOW)
 
-	  	if ( gpio.read(2) == 0 and gpio.read(3) == 0 ) then
-	  		print("Funil do triturador está vazio.")	
-	  		tmr.delay(1000000)
-	  		if ( gpio.read(2) == 0 and gpio.read(3) == 0 ) then
-		  		gpio.write(1, gpio.LOW)
-		  		gpio.write(4, gpio.HIGH)
-		  		tmr.delay(5000000) -- ENERGIA CONTROLA
-		  		gpio.write(4, gpio.LOW)
-
-		  	else
-		  		print("Movimento de garrafas no triturador.")
+		  		flag_freio = 1
+		  	else 
+		  		print("fazer nada, freio ja foi acionado, ligar somente o freio quando o motor ligar antes")
 		  	end
-
-	  	elseif ( gpio.read(2) == 1 and gpio.read(3) == 0 ) then
-	  		print("Poucas garrafas no triturador.")
-	  		gpio.write(4, gpio.LOW)
-	  		gpio.write(1, gpio.HIGH)
-
-	  	elseif ( gpio.read(2) == 1 and gpio.read(3) == 1 ) then
-	  		print("Muitas garrafas no triturador.")
-	  		gpio.write(1, gpio.HIGH)
-
 	  	end
 
-    end)
-    timer_principal:start()
-  end
+	  	tmr.delay(500000)
+	  end
+
 end
   
 function start()
   print(node.bootreason())
   print('\n\n=== Rodando');
-  
-  modo_operacao = MODOS_OPERACAO.NORMAL
+  pin_rpi_ler = 2
+  pin_ligar_motor = 7
+  pin_ligar_freio = 8
+
+  gpio.mode(pin_rpi_ler,gpio.INPUT)
+  gpio.mode(pin_ligar_motor,gpio.OUTPUT)
+  gpio.mode(pin_ligar_freio, gpio.OUTPUT)	
+
   local timer_principal = tmr.create()
   loop_principal(timer_principal);
-  
-end
